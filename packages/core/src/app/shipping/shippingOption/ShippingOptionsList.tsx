@@ -8,6 +8,7 @@ import { Checklist, ChecklistItem } from '../../ui/form';
 import { LoadingOverlay } from '../../ui/loading';
 
 import StaticShippingOption from './StaticShippingOption';
+import { mtxConfig } from '../../mtxConfig';
 
 interface ShippingOptionListItemProps {
     consignmentId: string;
@@ -36,13 +37,19 @@ const ShippingOptionListItem: FunctionComponent<ShippingOptionListItemProps> = (
         [isSelected, isMultiShippingMode, shippingOption],
     );
 
-
+    // ---------------- [MTX MOD] ---------------
     return (
+        <div
+        style={{
+          display: shippingOption.description === mtxConfig.shippingMethods.corriereContrassegno ? 'none' : 'block',
+        }}
+      >
         <ChecklistItem
-            htmlId={`shippingOptionRadio-${consignmentId}-${shippingOption.id}`}
-            label={renderLabel}
-            value={shippingOption.id}
+          htmlId={`shippingOptionRadio-${consignmentId}-${shippingOption.id}`}
+          label={renderLabel}
+          value={shippingOption.id}
         />
+      </div>
     );
 };
 
