@@ -65,6 +65,8 @@ export default class CheckoutStep extends Component<CheckoutStepProps, CheckoutS
 
         const { isClosed } = this.state;
 
+        // console.log("heading", suggestion, summary, type)
+
         return (
             <li
                 className={classNames('checkout-step', 'optimizedCheckout-checkoutStep', {
