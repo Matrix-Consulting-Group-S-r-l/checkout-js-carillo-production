@@ -112,7 +112,7 @@ const BillingForm = ({
 
     if (pivaField) {
         pivaField.required = isInvoiceRequired;
-    }
+    }    
 
     return (
         <Form autoComplete="on">
