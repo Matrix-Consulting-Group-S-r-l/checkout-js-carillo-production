@@ -11,7 +11,7 @@ import { lazy } from 'yup';
 
 import { TranslatedString, withLanguage, WithLanguageProps } from '@bigcommerce/checkout/locale';
 import { usePayPalFastlaneAddress } from '@bigcommerce/checkout/paypal-fastlane-integration';
-import { AddressFormSkeleton } from '@bigcommerce/checkout/ui';
+import { AddressFormSkeleton, LoadingOverlay } from '@bigcommerce/checkout/ui';
 
 import {
     AddressForm,
@@ -27,9 +27,9 @@ import { getCustomFormFieldsValidationSchema } from '../formFields';
 import { OrderComments } from '../orderComments';
 import { Button, ButtonVariant } from '../ui/button';
 import { Fieldset, Form } from '../ui/form';
-import { LoadingOverlay } from '../ui/loading';
 
 import StaticBillingAddress from './StaticBillingAddress';
+import { mtxConfig } from '../mtxConfig';
 
 export type BillingFormValues = AddressFormValues & { orderComment: string };
 
@@ -103,6 +103,16 @@ const BillingForm = ({
     const handleUseNewAddress = () => {
         handleSelectAddress({});
     };
+
+    const isInvoiceRequired = billingAddress?.customFields?.some(
+        field => field.fieldId === ("field_" + mtxConfig.AddressCustomFields.fattID) && field.fieldValue === 'Y'
+    ) || false; // Imposta false di default se `customFields` è undefined
+
+    const pivaField = editableFormFields.find(field => field.id === ("field_" + mtxConfig.AddressCustomFields.pIvaID));
+
+    if (pivaField) {
+        pivaField.required = isInvoiceRequired;
+    }    
 
     return (
         <Form autoComplete="on">
@@ -187,17 +197,17 @@ export default withLanguage(
         }: BillingFormProps & WithLanguageProps) =>
             methodId === 'amazonpay'
                 ? lazy<Partial<AddressFormValues>>((values) =>
-                      getCustomFormFieldsValidationSchema({
-                          translate: getTranslateAddressError(language),
-                          formFields: getFields(values && values.countryCode),
-                      }),
-                  )
+                    getCustomFormFieldsValidationSchema({
+                        translate: getTranslateAddressError(language),
+                        formFields: getFields(values && values.countryCode),
+                    }),
+                )
                 : lazy<Partial<AddressFormValues>>((values) =>
-                      getAddressFormFieldsValidationSchema({
-                          language,
-                          formFields: getFields(values && values.countryCode),
-                      }),
-                  ),
+                    getAddressFormFieldsValidationSchema({
+                        language,
+                        formFields: getFields(values && values.countryCode),
+                    }),
+                ),
         enableReinitialize: true,
     })(BillingForm),
 );
