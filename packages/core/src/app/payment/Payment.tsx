@@ -692,6 +692,13 @@ export function mapToPaymentProps({
     return true;
   });
 
+  // MCG [Init]
+  // Rimuovi 'cod' se grandTotal < 200€  
+  if (checkout?.grandTotal > 200) {
+    filteredMethods = filteredMethods.filter((method) => method.id !== 'cod');
+  }
+  // MCG [End]
+
   if (consignments && consignments.length > 1) {
     const multiShippingIncompatibleMethodIds: string[] = [PaymentMethodId.AmazonPay];
 
