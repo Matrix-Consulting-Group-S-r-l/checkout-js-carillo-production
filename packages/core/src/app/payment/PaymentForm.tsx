@@ -112,7 +112,7 @@ const PaymentForm: FunctionComponent<
                 onUnhandledError={onUnhandledError}
             />
         );
-    }
+    }    
 
     return (
         <Form className="checkout-form" testId="payment-form">
@@ -125,6 +125,26 @@ const PaymentForm: FunctionComponent<
                     usableStoreCredit={usableStoreCredit}
                 />
             )}
+
+            {new Date() < new Date('2026-01-07') && (
+                <div
+                    style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    padding: '1rem',
+                    backgroundColor: '#eff6ff',
+                    borderRadius: '0.475rem',
+                    border: '1px solid #e5e7eb',
+                    textAlign: 'center',
+                    userSelect: 'none',
+                    fontWeight: 'bold',
+                    }}
+                >
+                    Gli ordini in "Pagamento alla consegna" saranno evasi a partire dal 07 Gennaio
+                </div>
+                )}
+
+
 
             <PaymentMethodListFieldset
                 isEmbedded={isEmbedded}
