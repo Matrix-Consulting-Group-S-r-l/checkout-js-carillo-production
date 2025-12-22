@@ -129,7 +129,6 @@ const PaymentForm: FunctionComponent<
             {new Date() < new Date('2026-01-07') && (
                 <div
                     style={{
-                    display: 'block',
                     marginBottom: '0.5rem',
                     padding: '1rem',
                     backgroundColor: '#eff6ff',
@@ -137,12 +136,32 @@ const PaymentForm: FunctionComponent<
                     border: '1px solid #e5e7eb',
                     textAlign: 'center',
                     userSelect: 'none',
-                    fontWeight: 'bold',
                     }}
                 >
-                    Gli ordini in "Pagamento alla consegna" saranno evasi a partire dal 07 Gennaio
+                    {/* Messaggio principale */}
+                    <div
+                    style={{
+                        fontWeight: '700',
+                        fontSize: '1rem',
+                        marginBottom: '0.25rem',
+                        color: '#1e3a8a',
+                    }}
+                    >
+                    Gli ordini effettuati saranno evasi a partire dal 29 Dicembre
+                    </div>
+
+                    {/* Disclaimer */}
+                    <div
+                    style={{
+                        fontSize: '0.85rem',
+                        color: '#475569',
+                    }}
+                    >
+                    <strong>Nota bene</strong>: gli ordini con <strong>Pagamento alla consegna</strong> saranno evasi a partire dal <strong>07 Gennaio</strong>
+                    </div>
                 </div>
                 )}
+
 
 
 
