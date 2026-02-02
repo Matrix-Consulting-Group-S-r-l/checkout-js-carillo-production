@@ -517,7 +517,7 @@ class Payment extends Component<
   };
 
   private setSelectedMethod: (method?: PaymentMethod) => void = (method) => {
-    const { checkoutService, getPaymentMethods } = this.props; // --------------[MTX MOD (Single Line)]--------------
+    const { checkoutService } = this.props; // --------------[MTX MOD (Single Line)]--------------
     const { selectedMethod } = this.state;
 
     if (selectedMethod === method) {
@@ -532,8 +532,9 @@ class Payment extends Component<
         selectCarrier(checkoutService, mtxConfig.shippingMethods.corriereStandard);
       }
 
-      const methodSelected = getPaymentMethods().findIndex((pay: any) => pay.id === method?.id);
+      const methodSelected = this.props.methods.findIndex((pay: any) => pay.id === method?.id);
       setGlobalState('mtxIndexOfSelectedPayment', methodSelected > -1 ? methodSelected : 0);
+
       // ------------[MTX END]------------------------
 
       this.trackSelectedPaymentMethod(method);
@@ -693,9 +694,11 @@ export function mapToPaymentProps({
   });
 
   // MCG [Init]
-  // Rimuovi 'cod' se grandTotal < 200€  
-  if (checkout?.grandTotal > 200) {
-    filteredMethods = filteredMethods.filter((method) => method.id !== 'cod');
+  // Rimuovi 'cod' se il totale del carrello non rientra nei limiti configurati es €49 - €300
+  if (checkout?.grandTotal < mtxConfig.shippingMethods.contrassegnoMin || checkout?.grandTotal > mtxConfig.shippingMethods.contrassegnoMax) {
+    filteredMethods = filteredMethods.filter(
+      (method) => method.id !== 'cod'
+    );
   }
   // MCG [End]
 
@@ -720,12 +723,21 @@ export function mapToPaymentProps({
 
   const mtxIndexOfSelectedPayment = getGlobalState('mtxIndexOfSelectedPayment'); // --------------[MTX MOD (Single Line)]--------------
 
+  const safeIndex =
+    typeof mtxIndexOfSelectedPayment === 'number'
+      ? Math.min(Math.max(mtxIndexOfSelectedPayment, 0), filteredMethods.length - 1)
+      : 0;
+
+  const safeDefaultMethod =
+    selectedPaymentMethod || filteredMethods[safeIndex] || filteredMethods[0];
+
   return {
     applyStoreCredit: checkoutService.applyStoreCredit,
     availableStoreCredit: customer.storeCredit,
     cartUrl: config.links.cartLink,
     clearError: checkoutService.clearError,
-    defaultMethod: selectedPaymentMethod || filteredMethods[mtxIndexOfSelectedPayment], // --------------[MTX MOD (Single Line)]--------------
+    //defaultMethod: selectedPaymentMethod || filteredMethods[mtxIndexOfSelectedPayment], // --------------[MTX MOD (Single Line)]--------------
+    defaultMethod: safeDefaultMethod, // --------------[MTX MOD (Single Line)]--------------
     finalizeOrderError: getFinalizeOrderError(),
     finalizeOrderIfNeeded: checkoutService.finalizeOrderIfNeeded,
     loadCheckout: checkoutService.loadCheckout,

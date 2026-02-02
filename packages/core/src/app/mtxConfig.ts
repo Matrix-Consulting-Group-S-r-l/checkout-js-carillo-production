@@ -3,6 +3,8 @@ export const mtxConfig = {
         corriereStandard: 'Corriere Espresso (BRT) - Consegna in 4/5 giorni lavorativi',
         corriereContrassegno: 'Corriere Contrassegno',
         corriereConsegnaInNegozio: 'Consegna in negozio',
+        contrassegnoMin: 49,
+        contrassegnoMax: 300,
     },
     OrderConfirmation: {
         textCod: "Abbiamo ricevuto il tuo ordine. L'ordine è in fase di elaborazione nel nostro sistema. L'elaborazione potrebbe richiedere alcuni minuti.",
